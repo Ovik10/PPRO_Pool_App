@@ -3,12 +3,13 @@ package cz.ppro.poolapp.controller;
 import cz.ppro.poolapp.model.Account;
 import cz.ppro.poolapp.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/account")
+@CrossOrigin
 public class AccountController {
     @Autowired
     private AccountService accountService;
@@ -18,7 +19,10 @@ public class AccountController {
         accountService.saveAccount(account);
         return "You have been registred";
     }
-
+    @GetMapping("/getAll")
+    public List<Account> getAllAccounts(){
+        return accountService.getAllAccounts();
+    }
 
 
 }

@@ -25,6 +25,10 @@ public class Account {
         this.isTrainer = isTrainer;
     }
 
+    public Account() {
+
+    }
+
     public int getId() {
         return id;
     }
