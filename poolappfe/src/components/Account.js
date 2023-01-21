@@ -14,11 +14,11 @@ export default function Account() {
     e.preventDefault()
     const account={login, password, email}
     console.log(account)
-    fetch("http://localhost:8080/account/add",{mode: 'no-cors', method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(account)}).then(()=>{console.log("new Account has been added")})
+    fetch("http://localhost:8080/account/add", method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(account)}).then(()=>{console.log("new Account has been added")})
   }
 
   useEffect(()=>{
-    fetch("http://localhost:8080/account/getAll", {mode: 'no-cors'}).then(res=>res.json()).then((result)=>{setAccounts(result);
+    fetch("http://localhost:8080/account/getAll").then(res=>res.json()).then((result)=>{setAccounts(result);
 })},[])
 
   return (
