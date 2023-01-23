@@ -23,6 +23,7 @@ public class AuthenticationService {
                 .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .credits(request.getCredits())
                 .role(Role.USER)
                 .build();
         repository.save(user);
