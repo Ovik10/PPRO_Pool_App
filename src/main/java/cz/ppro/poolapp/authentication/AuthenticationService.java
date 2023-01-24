@@ -58,4 +58,16 @@ public class AuthenticationService {
                 .role(user.getRole())
                 .build();
     }
+
+    public void deleteUser(int id){
+        repository.deleteById(id);
+    }
+    public void updateUser(User user, int id){
+        User u = repository.findById(id).get();
+        u.setEmail(user.getEmail());
+        u.setFirstname(user.getFirstname());
+        u.setLastname(user.getLastname());
+        u.setPassword(passwordEncoder.encode(user.getPassword()));
+        repository.save(u);
+    }
 }

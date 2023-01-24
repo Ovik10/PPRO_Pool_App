@@ -1,12 +1,10 @@
 package cz.ppro.poolapp.authentication;
 
 
+import cz.ppro.poolapp.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,5 +24,15 @@ public class AuthenticationController {
             @RequestBody AuthenticationRequest request
     ) {
         return ResponseEntity.ok(service.authenticate(request));
+    }
+    @DeleteMapping("delete/{id}")
+    public String delete(@PathVariable int id){
+        service.deleteUser(id);
+        return "User has been deleted";
+    }
+    @PutMapping("/update/{id}")
+    public String update(@RequestBody User user, @PathVariable int id){
+        service.updateUser(user, id);
+        return "User has been updated";
     }
 }
