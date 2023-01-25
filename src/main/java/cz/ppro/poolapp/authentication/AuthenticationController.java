@@ -3,6 +3,7 @@ package cz.ppro.poolapp.authentication;
 
 import cz.ppro.poolapp.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @CrossOrigin
 public class AuthenticationController {
-
+    @Autowired
     private final AuthenticationService service;
 
     @PostMapping("/register")
