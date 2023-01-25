@@ -31,7 +31,7 @@ public class User implements UserDetails {
     @NotBlank
     private String lastname;
     @NotBlank
-    @Email
+    //@Email
     private String email;
     @NotBlank
     private String password;
