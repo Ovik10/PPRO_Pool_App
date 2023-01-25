@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/course")
-@CrossOrigin
 public class LectionController {
     @Autowired
     private LectionService lectionService;

@@ -36,6 +36,11 @@ public class AuthenticationService {
             var jwtToken = jwtService.generateToken(user);
             return AuthenticationResponse.builder()
                     .token(jwtToken)
+                    .credits(user.getCredits())
+                    .email(user.getEmail())
+                    .firstname(user.getFirstname())
+                    .lastname(user.getLastname())
+                    .role(user.getRole())
                     .build();
     }
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
