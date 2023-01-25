@@ -2,7 +2,9 @@ package cz.ppro.poolapp.model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +31,7 @@ public class User implements UserDetails {
     @NotBlank
     private String lastname;
     @NotBlank
+    @Email
     private String email;
     @NotBlank
     private String password;
