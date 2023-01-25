@@ -18,6 +18,7 @@ public class LectionController {
         lectionService.saveLection(lection);
         return "Your lection has been created";
     }
+    @CrossOrigin
     @GetMapping("/getAll")
     public List<Lection> getAll(){
         return lectionService.getAllLections();
