@@ -21,11 +21,11 @@ public class LectionController {
         return "Your lection has been created";
     }
     @GetMapping("/getAll")
-    public List<Lection> getAllAccounts(){
+    public List<Lection> getAll(){
         return lectionService.getAllLections();
     }
     @GetMapping("/get/{id}")
-    public @ResponseBody Optional<Lection> getLection( @PathVariable int id){
+    public @ResponseBody Optional<Lection> get( @PathVariable int id){
         return lectionService.getLection(id);
 
     }
