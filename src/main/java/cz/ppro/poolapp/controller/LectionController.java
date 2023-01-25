@@ -4,8 +4,6 @@ import cz.ppro.poolapp.model.Lection;
 import cz.ppro.poolapp.service.LectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 @CrossOrigin
