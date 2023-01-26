@@ -28,9 +28,9 @@ public class AuthenticationController {
     ) {
         return ResponseEntity.ok(service.authenticate(request));
     }
-    @DeleteMapping("delete/{id}")
-    public String delete(@PathVariable int id){
-        service.deleteUser(id);
+    @DeleteMapping("delete")
+    public String delete(HttpServletRequest request){
+        service.deleteUser(request);
         return "User has been deleted";
     }
     @PutMapping("/update")

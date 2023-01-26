@@ -72,8 +72,13 @@ public class AuthenticationService {
                 .build();
     }
 
-    public void deleteUser(int id){
-        repository.deleteById(id);
+    public void deleteUser(HttpServletRequest request){
+        String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        final String userEmail;
+        jwt = authHeader.substring(7);
+        userEmail = jwtService.extractUsername(jwt);
+        repository.deleteById(userEmail);
     }
     public void updateUser(User user, HttpServletRequest request){
         String authHeader = request.getHeader("Authorization");
