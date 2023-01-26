@@ -39,7 +39,7 @@ public class AuthenticationService {
         if(repository.findByEmail(user.getEmail()).isPresent()){
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "E-mail je již obsazen");
-        } else
+        } else {
         repository.save(user);
             var jwtToken = jwtService.generateToken(user);
             return AuthenticationResponse.builder()
@@ -49,7 +49,7 @@ public class AuthenticationService {
                     .firstname(user.getFirstname())
                     .lastname(user.getLastname())
                     .role(user.getRole())
-                    .build();
+                    .build();}
     }
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
