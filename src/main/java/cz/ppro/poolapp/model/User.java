@@ -24,8 +24,6 @@ import java.util.List;
 @Table(name="_user")
 public class User implements UserDetails {
 
-    @GeneratedValue
-    private Integer id;
     @NotBlank
     private String firstname;
     @NotBlank

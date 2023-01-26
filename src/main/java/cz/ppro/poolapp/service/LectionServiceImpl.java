@@ -1,7 +1,11 @@
 package cz.ppro.poolapp.service;
 
+import cz.ppro.poolapp.config.JwtService;
 import cz.ppro.poolapp.model.Lection;
+import cz.ppro.poolapp.model.User;
 import cz.ppro.poolapp.repository.LectionRepository;
+import cz.ppro.poolapp.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,13 @@ public class LectionServiceImpl implements LectionService {
 
     @Autowired
     private LectionRepository lectionRepository;
+    private final JwtService jwtService;
+    private final UserRepository userRepository;
+
+    public LectionServiceImpl(JwtService jwtService, UserRepository repository) {
+        this.jwtService = jwtService;
+        this.userRepository = repository;
+    }
 
     @Override
     public Lection saveLection(Lection lection) {
@@ -41,6 +52,21 @@ public class LectionServiceImpl implements LectionService {
     }
     public void deleteLection(int id){
         lectionRepository.deleteById(id);
+    }
+    public void book(Lection lection, int id, HttpServletRequest request){
+        String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        final String userEmail;
+        jwt = authHeader.substring(7);
+        userEmail = jwtService.extractUsername(jwt);
+        Lection l = lectionRepository.findById(id).get();
+        User u = userRepository.findByEmail(userEmail).orElse(null);
+        l.setCapacity(l.getCapacity()-1);
+        u.setCredits(u.getCredits()-l.getPrice());
+        l.getUsersBooked().add(u);
+        lectionRepository.save(l).setId(id);
+        userRepository.save(u);
+
 
     }
 }

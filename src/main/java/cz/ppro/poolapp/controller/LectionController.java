@@ -1,7 +1,9 @@
 package cz.ppro.poolapp.controller;
 
 import cz.ppro.poolapp.model.Lection;
+import cz.ppro.poolapp.repository.LectionRepository;
 import cz.ppro.poolapp.service.LectionService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -12,6 +14,8 @@ import java.util.Optional;
 public class LectionController {
     @Autowired
     private LectionService lectionService;
+    @Autowired
+    private LectionRepository lectionRepository;
 
     @PostMapping("/add")
     public String add(@RequestBody Lection lection){
@@ -38,7 +42,10 @@ public class LectionController {
         lectionService.deleteLection(id);
         return "Lection has been deleted";
     }
-
-
+    @PutMapping("book/{id}")
+    public String book(Lection lection, @PathVariable int id, HttpServletRequest request){
+        lectionService.book(lection, id, request);
+        return "booked";
+    }
 
 }
