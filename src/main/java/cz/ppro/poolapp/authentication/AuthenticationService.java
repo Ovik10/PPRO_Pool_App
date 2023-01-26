@@ -91,7 +91,7 @@ public class AuthenticationService {
             u.setLastname(user.getLastname());
             if(user.getPassword() != null) {
             u.setPassword(passwordEncoder.encode(user.getPassword()));}
-            repository.save(u);
+                    repository.save(u);
 
     }
 }

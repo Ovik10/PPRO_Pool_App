@@ -35,7 +35,11 @@ public class AuthenticationController {
     }
     @PutMapping("/update")
     public String update(@RequestBody User user, HttpServletRequest request){
-        service.updateUser(user, request);
+        try {
+            service.updateUser(user, request);
+        } catch (Exception handlerException) {
+            return "Sometehing went wrong";
+        }
         return "User has been updated";
     }
 }
