@@ -15,5 +15,4 @@ public class PoolappApplication {
     public static void main(String[] args) {
         SpringApplication.run(PoolappApplication.class, args);
     }
-
 }
