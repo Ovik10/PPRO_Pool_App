@@ -4,13 +4,20 @@ import cz.ppro.poolapp.config.JwtService;
 import cz.ppro.poolapp.model.Role;
 import cz.ppro.poolapp.model.User;
 import cz.ppro.poolapp.repository.UserRepository;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.support.QuerydslJpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +26,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
                 .firstname(request.getFirstname())
@@ -67,14 +75,17 @@ public class AuthenticationService {
     public void deleteUser(int id){
         repository.deleteById(id);
     }
-    public void updateUser(User user, int id){
-        if (user.getId() == id ) {
-            User u = repository.findById(id).get();
-            u.setEmail(user.getEmail());
+    public void updateUser(User user, HttpServletRequest request){
+        String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        final String userEmail;
+        jwt = authHeader.substring(7);
+        userEmail = jwtService.extractUsername(jwt);
+            User u = repository.findByEmail(userEmail).orElse(null);
             u.setFirstname(user.getFirstname());
             u.setLastname(user.getLastname());
             u.setPassword(passwordEncoder.encode(user.getPassword()));
             repository.save(u);
-        }
+
     }
 }

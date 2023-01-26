@@ -2,6 +2,7 @@ package cz.ppro.poolapp.authentication;
 
 
 import cz.ppro.poolapp.model.User;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,9 +33,9 @@ public class AuthenticationController {
         service.deleteUser(id);
         return "User has been deleted";
     }
-    @PutMapping("/update/{id}")
-    public String update(@RequestBody User user, @PathVariable int id){
-        service.updateUser(user, id);
+    @PutMapping("/update")
+    public String update(@RequestBody User user, HttpServletRequest request){
+        service.updateUser(user, request);
         return "User has been updated";
     }
 }
