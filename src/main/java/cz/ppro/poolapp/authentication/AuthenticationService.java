@@ -89,7 +89,8 @@ public class AuthenticationService {
             User u = repository.findByEmail(userEmail).orElse(null);
             u.setFirstname(user.getFirstname());
             u.setLastname(user.getLastname());
-            u.setPassword(passwordEncoder.encode(user.getPassword()));
+            if(!u.getPassword().isEmpty()) {
+            u.setPassword(passwordEncoder.encode(user.getPassword()));}
             repository.save(u);
 
     }
