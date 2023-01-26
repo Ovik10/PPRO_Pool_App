@@ -23,13 +23,14 @@ import java.util.List;
 @Entity
 @Table(name="_user")
 public class User implements UserDetails {
-    @Id
+
     @GeneratedValue
     private Integer id;
     @NotBlank
     private String firstname;
     @NotBlank
     private String lastname;
+    @Id
     @NotBlank
     //@Email
     private String email;

@@ -5,7 +5,9 @@ import cz.ppro.poolapp.model.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -19,8 +21,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
-    ) {
-        return ResponseEntity.ok(service.register(request));
+    ) { return ResponseEntity.ok(service.register(request));
     }
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
@@ -30,16 +31,13 @@ public class AuthenticationController {
     }
     @DeleteMapping("delete")
     public String delete(HttpServletRequest request){
+
         service.deleteUser(request);
         return "User has been deleted";
     }
     @PutMapping("/update")
-    public String update(@RequestBody User user, HttpServletRequest request){
-        try {
-            service.updateUser(user, request);
-        } catch (Exception handlerException) {
-            return "Sometehing went wrong";
-        }
-        return "User has been updated";
+    public ResponseEntity<UpdateUserResponse> update(@RequestBody User user, HttpServletRequest request){
+        return ResponseEntity.ok(service.updateUser(user, request));
+
     }
 }

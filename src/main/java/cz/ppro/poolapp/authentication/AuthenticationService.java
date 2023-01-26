@@ -4,12 +4,8 @@ import cz.ppro.poolapp.config.JwtService;
 import cz.ppro.poolapp.model.Role;
 import cz.ppro.poolapp.model.User;
 import cz.ppro.poolapp.repository.UserRepository;
-import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.support.QuerydslJpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,7 +34,7 @@ public class AuthenticationService {
                 .build();
         if(repository.findByEmail(user.getEmail()).isPresent()){
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "E-mail je již obsazen");
+                    HttpStatus.IM_USED, "E-mail je již obsazen");
         } else {
         repository.save(user);
             var jwtToken = jwtService.generateToken(user);
@@ -80,7 +76,7 @@ public class AuthenticationService {
         userEmail = jwtService.extractUsername(jwt);
         repository.deleteById(userEmail);
     }
-    public void updateUser(User user, HttpServletRequest request){
+    public UpdateUserResponse updateUser(User user, HttpServletRequest request){
         String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
@@ -92,6 +88,13 @@ public class AuthenticationService {
             if(user.getPassword() != null) {
             u.setPassword(passwordEncoder.encode(user.getPassword()));}
                     repository.save(u);
+        return UpdateUserResponse.builder()
+                .credits(u.getCredits())
+                .email(u.getEmail())
+                .firstname(u.getFirstname())
+                .lastname(u.getLastname())
+                .role(u.getRole())
+                .build();}
 
     }
-}
+
