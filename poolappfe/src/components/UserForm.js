@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { updateUser } from '../services/auth';
+import { putUser } from '../services/auth';
 
 const UserForm = ({ user }) => {
-  const [firstName, setFirstName] = useState(user.firstName);
-  const [lastName, setLastName] = useState(user.lastName);
+  const [firstname, setFirstName] = useState(user.firstname);
+  const [lastname, setLastName] = useState(user.lastname);
   const [password, setPassword] = useState(user.password);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedUser = { firstName, lastName, password };
-    await updateUser(updatedUser);
+    const updatedUser = { firstname, lastname, password };
+    await putUser(updatedUser);
   };
 
   return (
@@ -18,7 +19,7 @@ const UserForm = ({ user }) => {
         First Name:
         <input
           type="text"
-          value={firstName}
+          value={firstname}
           onChange={(e) => setFirstName(e.target.value)}
         />
       </label>
@@ -28,7 +29,7 @@ const UserForm = ({ user }) => {
         Last Name:
         <input
           type="text"
-          value={firstName}
+          value={lastname}
           onChange={(e) => setLastName(e.target.value)}
         />
       </label>

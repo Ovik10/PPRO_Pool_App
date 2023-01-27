@@ -13,7 +13,7 @@ export const getCourses = async () => {
 };
 
 export const getCourseById = async (id) => {
-    const res = await axios.get(`${baseUrl}/${id}`);
+    const res = await axios.get(`${baseUrl}/get/${id}`, getAuthHeader());
     return res;
   };
   
@@ -27,7 +27,8 @@ export const getCourseById = async (id) => {
   };
   
   export const updateCourse = async (id, course) => {
-    const res = await axios.put(`${baseUrl}/${id}`, course, getAuthHeader());
+    const res = await axios.put(`${baseUrl}/update/${id}`, course, getAuthHeader());
+    console.log(res)
     return res;
   };
   
