@@ -14,6 +14,7 @@ const Navbar = ({ user, setUser }) => {
         <>
           <Link to="/courses">Courses</Link>
           <Link to="/courses/add">Add course</Link>
+          <Link to="/user">Edit profile</Link>
           <button onClick={handleLogout}>Logout</button>
         </>
       ) : (

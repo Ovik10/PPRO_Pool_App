@@ -12,7 +12,7 @@ import {
   login,
   register,
   getCurrentUser,
-  logout,
+  putUser,
 } from './services/auth';
 
 import {
@@ -29,6 +29,7 @@ import Navbar from './components/Navbar';
 import RegisterPage from './pages/register';
 import LoginPage from './pages/login';
 
+import UserForm from './components/UserForm';
 import CourseList from './components/CourseList';
 import CourseDetail from './components/CourseDetail';
 import CourseForm from './components/CourseForm';
@@ -78,6 +79,17 @@ const App = () => {
     setCourses(updatedCourses);
   };
 
+  const handleUpdateUser = async (updatedUser) => {
+    /* const res = await putUser(updatedUser);
+    setUser(res); */
+  };
+
+  const handleSelectCourse = (id) => {
+    const selected = courses.find((l) => l.id === id);
+    console.log(selected)
+    return selected;
+  };
+
   return (
     <Router>
       <Navbar user={user} setUser={setUser} />
@@ -96,10 +108,10 @@ const App = () => {
           <LoginPage onLogin={handleLogin} />}
         />
         <Route exact path="/user" element=
-          {user ? (
-            <UserForm user={user} onUpdateUser={setUser} />
+          {user && user.role == "USER" ? (
+            <UserForm user={user} onUpdateUser={handleUpdateUser} />
           ) : (
-            <Navigate to="/login" />
+            <Navigate to="/fwed" />
           )}
         />
         <Route exact path="/courses" element={
@@ -110,9 +122,20 @@ const App = () => {
           )
         }
         />
+        <Route path="course/:id" element={<CourseDetail onFindCourse={handleSelectCourse} />}
+        />
         <Route exact path="/courses/add" element=
           {user && user.role == "USER" ? (
             <CourseForm onCreateCourse={handleCreateCourse} />
+          ) : (
+            <Navigate to="/courses" />
+          )}
+        />
+        <Route exact path="/courses/update/:id" element=
+          {user && user.role == "USER" ? (
+            <CourseForm
+              onUpdateCourse={handleUpdateCourse}
+            />
           ) : (
             <Navigate to="/courses" />
           )}

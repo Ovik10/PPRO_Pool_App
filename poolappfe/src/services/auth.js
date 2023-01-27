@@ -29,8 +29,10 @@ export const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem('user'));
 };
 
-export const updateUser = async (user) => {
+export const putUser = async (user) => {
+  console.log("fewfwefewfwefwefwefwefwe")
   const res = await axios.put(`${baseUrl}/update`, user, getAuthHeader());
+  console.log(res);
   return res;
 };
 
