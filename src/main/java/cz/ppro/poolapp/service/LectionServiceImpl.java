@@ -63,7 +63,7 @@ public class LectionServiceImpl implements LectionService {
         User u = userRepository.findByEmail(userEmail).orElse(null);
         l.setCapacity(l.getCapacity()-1);
         u.setCredits(u.getCredits()-l.getPrice());
-        l.getUsersBooked().add(u);
+        l.getUsersBooked().add(userEmail);
         lectionRepository.save(l).setId(id);
         userRepository.save(u);
 
