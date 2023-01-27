@@ -95,6 +95,16 @@ public class AuthenticationService {
                 .lastname(u.getLastname())
                 .role(u.getRole())
                 .build();}
+    public void increaseCredits(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        final String userEmail;
+        jwt = authHeader.substring(7);
+        userEmail = jwtService.extractUsername(jwt);
+        User u = repository.findByEmail(userEmail).orElse(null);
+        u.setCredits(u.getCredits() + 100);
+        repository.save(u);
+    }
 
     }
 

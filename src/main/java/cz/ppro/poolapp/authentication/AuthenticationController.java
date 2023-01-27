@@ -31,13 +31,17 @@ public class AuthenticationController {
     }
     @DeleteMapping("/delete")
     public String delete(HttpServletRequest request){
-
         service.deleteUser(request);
         return "User has been deleted";
     }
     @PutMapping("/update")
     public ResponseEntity<UpdateUserResponse> update(@RequestBody User user, HttpServletRequest request){
         return ResponseEntity.ok(service.updateUser(user, request));
+    }
+    @PutMapping("/increase")
+    public String update(HttpServletRequest request){
+        service.increaseCredits(request);
+        return "Credits added";
 
     }
 }
