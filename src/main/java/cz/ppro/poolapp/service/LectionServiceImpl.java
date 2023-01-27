@@ -53,7 +53,7 @@ public class LectionServiceImpl implements LectionService {
     public void deleteLection(int id){
         lectionRepository.deleteById(id);
     }
-    public void book(Lection lection, int id, HttpServletRequest request){
+    public String book(Lection lection, int id, HttpServletRequest request){
         String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
@@ -61,12 +61,39 @@ public class LectionServiceImpl implements LectionService {
         userEmail = jwtService.extractUsername(jwt);
         Lection l = lectionRepository.findById(id).get();
         User u = userRepository.findByEmail(userEmail).orElse(null);
-        l.setCapacity(l.getCapacity()-1);
-        u.setCredits(u.getCredits()-l.getPrice());
-        l.getUsersBooked().add(userEmail);
-        lectionRepository.save(l).setId(id);
-        userRepository.save(u);
+        if(l.getUsersBooked().contains(userEmail)) {
+            lectionRepository.save(l).setId(id);
+            userRepository.save(u);
+            return "Already booked";
+        } else {
+            l.setCapacity(l.getCapacity() - 1);
+            u.setCredits(u.getCredits() - l.getPrice());
+            l.getUsersBooked().add(userEmail);
+            lectionRepository.save(l).setId(id);
+            userRepository.save(u);
+            return "Booked";
+        }
 
-
+    }
+    public String unbook(Lection lection, int id, HttpServletRequest request){
+        String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        final String userEmail;
+        jwt = authHeader.substring(7);
+        userEmail = jwtService.extractUsername(jwt);
+        Lection l = lectionRepository.findById(id).get();
+        User u = userRepository.findByEmail(userEmail).orElse(null);
+        if(!l.getUsersBooked().contains(userEmail)) {
+            lectionRepository.save(l).setId(id);
+            userRepository.save(u);
+            return "Already unbooked";
+        } else {
+            l.setCapacity(l.getCapacity() + 1);
+            u.setCredits(u.getCredits() + l.getPrice());
+            l.getUsersBooked().remove(userEmail);
+            lectionRepository.save(l).setId(id);
+            userRepository.save(u);
+            return "Unbooked";
+        }
     }
 }

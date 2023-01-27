@@ -44,8 +44,15 @@ public class LectionController {
     }
     @PutMapping("book/{id}")
     public String book(Lection lection, @PathVariable int id, HttpServletRequest request){
-        lectionService.book(lection, id, request);
-        return "booked";
+        return lectionService.book(lection, id, request);
+
     }
+
+    @PutMapping("unbook/{id}")
+    public String unbook(Lection lection, @PathVariable int id, HttpServletRequest request){
+        return lectionService.unbook(lection, id, request);
+
+    }
+
 
 }

@@ -13,6 +13,7 @@ public interface LectionService {
     public void deleteLection(int id);
 
     public Optional<Lection> getLection(int id);
-    public void book(Lection lection, int id, HttpServletRequest request);
+    public String book(Lection lection, int id, HttpServletRequest request);
+    public String unbook(Lection lection, int id, HttpServletRequest request);
 
 }

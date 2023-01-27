@@ -29,7 +29,7 @@ public class AuthenticationController {
     ) {
         return ResponseEntity.ok(service.authenticate(request));
     }
-    @DeleteMapping("delete")
+    @DeleteMapping("/delete")
     public String delete(HttpServletRequest request){
 
         service.deleteUser(request);
