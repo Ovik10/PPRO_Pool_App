@@ -14,8 +14,6 @@ import java.util.Optional;
 public class LectionController {
     @Autowired
     private LectionService lectionService;
-    @Autowired
-    private LectionRepository lectionRepository;
 
     @PostMapping("/add")
     public String add(@RequestBody Lection lection){
@@ -37,18 +35,18 @@ public class LectionController {
         lectionService.updateLection(lection, id);
         return "Lection has been updated";
     }
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable int id){
         lectionService.deleteLection(id);
         return "Lection has been deleted";
     }
-    @PutMapping("book/{id}")
+    @PutMapping("/book/{id}")
     public String book(Lection lection, @PathVariable int id, HttpServletRequest request){
         return lectionService.book(lection, id, request);
 
     }
 
-    @PutMapping("unbook/{id}")
+    @PutMapping("/unbook/{id}")
     public String unbook(Lection lection, @PathVariable int id, HttpServletRequest request){
         return lectionService.unbook(lection, id, request);
 

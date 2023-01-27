@@ -1,5 +1,6 @@
 package cz.ppro.poolapp.config;
 
+import cz.ppro.poolapp.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,8 +28,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/**")
                 .permitAll()
-                //.requestMatchers("/course/update", "course/create")
-                //.permitAll()
+                .requestMatchers("/course/update", "/course/add", "/delete/{id}")
+                .hasAuthority("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()
