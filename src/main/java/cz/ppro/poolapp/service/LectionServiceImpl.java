@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,32 +31,62 @@ public class LectionServiceImpl implements LectionService {
     }
 
     @Override
-    public Lection saveLection(Lection lection) {
-        return lectionRepository.save(lection);
+    public String saveLection(Lection lection) {
+        LocalDateTime localDate = LocalDateTime.now();
+        final LocalDateTime beginDate = convertToLocalDateTimeViaInstant(lection.getBeginDate());
+        if (localDate.isAfter(beginDate)) {
+            return "Course must be in the future";
+        } else {
+            lectionRepository.save(lection);
+            return "Course has been added";
+
+        }
     }
+
     @Override
     public List<Lection> getAllLections() {
+
         return lectionRepository.findAll();
     }
+
     @Override
-    public Optional<Lection> getLection(int id){
+    public Optional<Lection> getLection(int id) {
         return lectionRepository.findById(id);
     }
 
     @Override
-    public void updateLection(Lection lection, int id){
-        Lection l = lectionRepository.findById(id).get();
+    public String updateLection(Lection lection, int id) {
+        LocalDateTime localDate = LocalDateTime.now();
+        final LocalDateTime beginDate = convertToLocalDateTimeViaInstant(lection.getBeginDate());
+        if (localDate.isAfter(beginDate)) {
+            return "The course must be in the future";
+        } else {
+            Lection l = lectionRepository.findById(id).get();
             l.setName(lection.getName());
             l.setCapacity(lection.getCapacity());
             l.setBeginDate(lection.getBeginDate());
             l.setPrice(lection.getPrice());
             l.setDescription(lection.getDescription());
-        lectionRepository.save(l);
+            lectionRepository.save(l);
+            return "Course has been updated";
+        }
     }
-    public void deleteLection(int id){
+
+    public LocalDateTime convertToLocalDateTimeViaInstant(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+    }
+
+    @Override
+    public void deleteLection(int id) {
+
         lectionRepository.deleteById(id);
     }
-    public String book(Lection lection, int id, HttpServletRequest request){
+
+    @Override
+    public String book(Lection lection, int id, HttpServletRequest request) {
+        LocalDateTime localDate = LocalDateTime.now();
         String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
@@ -61,7 +94,15 @@ public class LectionServiceImpl implements LectionService {
         userEmail = jwtService.extractUsername(jwt);
         Lection l = lectionRepository.findById(id).get();
         User u = userRepository.findByEmail(userEmail).orElse(null);
-        if(l.getUsersBooked().contains(userEmail)) {
+        final LocalDateTime beginDate = convertToLocalDateTimeViaInstant(l.getBeginDate());
+        if (u.getCredits() - l.getPrice() < 0) {
+            return "Not enough credits";
+        }
+        if (localDate.isAfter(beginDate)) {
+            return "The Course is already gone";
+        }
+
+        if (l.getUsersBooked().contains(userEmail)) {
             lectionRepository.save(l).setId(id);
             userRepository.save(u);
             return "Already booked";
@@ -75,7 +116,9 @@ public class LectionServiceImpl implements LectionService {
         }
 
     }
-    public String unbook(Lection lection, int id, HttpServletRequest request){
+
+    @Override
+    public String unbook(Lection lection, int id, HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
@@ -83,7 +126,7 @@ public class LectionServiceImpl implements LectionService {
         userEmail = jwtService.extractUsername(jwt);
         Lection l = lectionRepository.findById(id).get();
         User u = userRepository.findByEmail(userEmail).orElse(null);
-        if(!l.getUsersBooked().contains(userEmail)) {
+        if (!l.getUsersBooked().contains(userEmail)) {
             lectionRepository.save(l).setId(id);
             userRepository.save(u);
             return "Already unbooked";
