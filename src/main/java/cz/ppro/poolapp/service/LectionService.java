@@ -1,5 +1,6 @@
 package cz.ppro.poolapp.service;
 
+import cz.ppro.poolapp.config.ErrorHandler;
 import cz.ppro.poolapp.model.Lection;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -17,7 +18,7 @@ public interface LectionService {
 
     Optional<Lection> getLection(int id);
 
-    String book(Lection lection, int id, HttpServletRequest request);
+    ErrorHandler.ExceptionRestResponse book(Lection lection, int id, HttpServletRequest request);
 
     String unbook(Lection lection, int id, HttpServletRequest request);
 

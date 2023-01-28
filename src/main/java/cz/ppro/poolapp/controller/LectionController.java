@@ -1,5 +1,6 @@
 package cz.ppro.poolapp.controller;
 
+import cz.ppro.poolapp.config.ErrorHandler;
 import cz.ppro.poolapp.model.Lection;
 import cz.ppro.poolapp.service.LectionService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,7 +51,7 @@ public class LectionController {
     }
 
     @PutMapping("/book/{id}")
-    public String book(Lection lection, @PathVariable int id, HttpServletRequest request) {
+    public ErrorHandler.ExceptionRestResponse book(Lection lection, @PathVariable int id, HttpServletRequest request) {
         return lectionService.book(lection, id, request);
 
     }

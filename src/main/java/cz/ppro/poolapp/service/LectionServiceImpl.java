@@ -95,7 +95,7 @@ public class LectionServiceImpl implements LectionService {
     }
 
     @Override
-    public String book(Lection lection, int id, HttpServletRequest request) {
+    public ErrorHandler.ExceptionRestResponse book(Lection lection, int id, HttpServletRequest request) {
         LocalDateTime localDate = LocalDateTime.now();
         String authHeader = request.getHeader("Authorization");
         final String jwt;
@@ -106,19 +106,19 @@ public class LectionServiceImpl implements LectionService {
         User u = userRepository.findByEmail(userEmail).orElse(null);
         final LocalDateTime beginDate = convertToLocalDateTimeViaInstant(l.getBeginDate());
         if (u.getCredits() - l.getPrice() < 0) {
-            new ErrorHandler.ExceptionRestResponse(
+           return new ErrorHandler.ExceptionRestResponse(
                     404,
             "jsi hříbek");
         }
 
         if (l.getCapacity() - 1 < 0) {
-            new ErrorHandler.ExceptionRestResponse(
+           return new ErrorHandler.ExceptionRestResponse(
                     404,
                     "jsi hříbek");
         }
 
         if (localDate.isAfter(beginDate)) {
-            new ErrorHandler.ExceptionRestResponse(
+           return new ErrorHandler.ExceptionRestResponse(
                     404,
                     "jsi hříbek");
         }
@@ -126,14 +126,18 @@ public class LectionServiceImpl implements LectionService {
         if (l.getUsersBooked().contains(userEmail)) {
             lectionRepository.save(l).setId(id);
             userRepository.save(u);
-            return "Already booked";
+           return new ErrorHandler.ExceptionRestResponse(
+                    200,
+                    "jsi hříbek");
         } else {
             l.setCapacity(l.getCapacity() - 1);
             u.setCredits(u.getCredits() - l.getPrice());
             l.getUsersBooked().add(userEmail);
             lectionRepository.save(l).setId(id);
             userRepository.save(u);
-            return "Booked";
+           return new ErrorHandler.ExceptionRestResponse(
+                    200,
+                    "jsi hříbek");
         }
 
     }
