@@ -11,11 +11,7 @@
   font-size: 16px;
 }
 
-form {
-  background-color: #EFF4F4;
-  padding: 64px 64px;
-  border-radius: 8px;
-}
+
 
 button {
   border-radius: 32px;
@@ -40,39 +36,62 @@ nav {
   padding: 0px 16px;
 }
 
-@media only screen and (min-width: 924px) {
-  nav {
-    display: flex;
-    justify-content: space-between;
-    flex-flow: row;
-  }
+form {
+  background-color: #EFF4F4;
+  border-radius: 8px;
+  padding: 16px 24px;
+
 }
 
-
-nav a, nav button {
+nav a,
+nav button {
   color: #000;
   text-decoration: none;
   font-weight: normal;
   font-size: 16px;
   padding: 8px 16px;
 }
+
 .logo {
   font-weight: bold;
   font-size: 32px;
   color: #2A3C53;
 }
+
 input {
   display: block;
-  width: 240px;
   margin-left: 16px;
+  width: 90%;
 }
-input[type='checkbox']{
+
+input[type='checkbox'] {
   display: inline;
   width: auto;
   margin: 0px 16px 0px 0px;
 }
+
 h1 {
   padding: 0px;
   font-size: 32px;
   padding-bottom: 32px;
 }
+
+@media only screen and (min-width: 924px) {
+  nav {
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row;
+  }
+
+  form {
+    padding: 48px 64px;
+  }
+
+  input {
+    width: 240px;
+  }
+}
+
+
+
+

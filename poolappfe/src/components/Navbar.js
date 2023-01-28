@@ -14,8 +14,8 @@ const Navbar = ({ user, setUser }) => {
       {user ? (
         <>
         <div>
-          <Link to="/courses">Courses</Link>
-          <Link to="/courses/add">Add course</Link>
+          <Link to="/courses"> Courses</Link>
+          <Link to="/courses/add">+ Add course</Link>
         </div>
         <div>
           <Link to="/user">Edit profile</Link>
