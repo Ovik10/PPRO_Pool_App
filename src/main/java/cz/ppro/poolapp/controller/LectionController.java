@@ -6,6 +6,7 @@ import cz.ppro.poolapp.service.LectionService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,7 +52,7 @@ public class LectionController {
     }
 
     @PutMapping("/book/{id}")
-    public ErrorHandler.ExceptionRestResponse book(Lection lection, @PathVariable int id, HttpServletRequest request) {
+    public String book(Lection lection, @PathVariable int id, HttpServletRequest request) {
         return lectionService.book(lection, id, request);
 
     }

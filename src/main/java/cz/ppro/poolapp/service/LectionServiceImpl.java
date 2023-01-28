@@ -1,6 +1,5 @@
 package cz.ppro.poolapp.service;
 
-import cz.ppro.poolapp.config.ErrorHandler;
 import cz.ppro.poolapp.config.JwtService;
 import cz.ppro.poolapp.model.Lection;
 import cz.ppro.poolapp.model.LectionType;
@@ -95,7 +94,7 @@ public class LectionServiceImpl implements LectionService {
     }
 
     @Override
-    public ErrorHandler.ExceptionRestResponse book(Lection lection, int id, HttpServletRequest request) {
+    public String book(Lection lection, int id, HttpServletRequest request) {
         LocalDateTime localDate = LocalDateTime.now();
         String authHeader = request.getHeader("Authorization");
         final String jwt;
@@ -106,41 +105,40 @@ public class LectionServiceImpl implements LectionService {
         User u = userRepository.findByEmail(userEmail).orElse(null);
         final LocalDateTime beginDate = convertToLocalDateTimeViaInstant(l.getBeginDate());
         if (u.getCredits() - l.getPrice() < 0) {
-           return new ErrorHandler.ExceptionRestResponse(
-                    404,
-            "jsi hříbek");
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Not enough credits"
+            );
         }
 
         if (l.getCapacity() - 1 < 0) {
-           return new ErrorHandler.ExceptionRestResponse(
-                    404,
-                    "jsi hříbek");
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "No free capacity"
+            );
         }
 
         if (localDate.isAfter(beginDate)) {
-           return new ErrorHandler.ExceptionRestResponse(
-                    404,
-                    "jsi hříbek");
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "The course is gone"
+            );
         }
 
         if (l.getUsersBooked().contains(userEmail)) {
             lectionRepository.save(l).setId(id);
             userRepository.save(u);
-           return new ErrorHandler.ExceptionRestResponse(
-                    200,
-                    "jsi hříbek");
-        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Already booked"
+            );
+        }
+
             l.setCapacity(l.getCapacity() - 1);
             u.setCredits(u.getCredits() - l.getPrice());
             l.getUsersBooked().add(userEmail);
             lectionRepository.save(l).setId(id);
             userRepository.save(u);
-           return new ErrorHandler.ExceptionRestResponse(
-                    200,
-                    "jsi hříbek");
+            return "Booked";
+
         }
 
-    }
 
     @Override
     public String unbook(Lection lection, int id, HttpServletRequest request) {

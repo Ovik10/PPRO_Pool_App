@@ -44,7 +44,9 @@ public class AuthenticationController {
     @PutMapping("/increase")
     public ResponseEntity<IncreaseCreditsResponse> update(HttpServletRequest request) {
         return ResponseEntity.ok(service.increaseCredits(request));
-
-
+    }
+    @GetMapping("/get")
+    public ResponseEntity<UpdateUserResponse> get( HttpServletRequest request) {
+        return ResponseEntity.ok(service.get(request));
     }
 }

@@ -83,6 +83,21 @@ public class AuthenticationService {
         userEmail = jwtService.extractUsername(jwt);
         repository.deleteById(userEmail);
     }
+    public UpdateUserResponse get(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        final String userEmail;
+        jwt = authHeader.substring(7);
+        userEmail = jwtService.extractUsername(jwt);
+        User u = repository.findByEmail(userEmail).orElse(null);
+        return UpdateUserResponse.builder()
+                .credits(u.getCredits())
+                .email(u.getEmail())
+                .firstname(u.getFirstname())
+                .lastname(u.getLastname())
+                .role(u.getRole())
+                .build();
+    }
 
     public UpdateUserResponse updateUser(User user, HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");

@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ErrorHandler {
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ExceptionRestResponse handleCustomException(Exception exception) {
-        return new ExceptionRestResponse(500, exception.getMessage());
+        return new ExceptionRestResponse(404, exception.getMessage());
     }
 
     @Value
