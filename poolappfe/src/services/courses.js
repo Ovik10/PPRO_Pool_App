@@ -33,16 +33,16 @@ export const getCourseById = async (id) => {
   };
   
   export const deleteCourse = async (id) => {
-    const res = await axios.delete(`${baseUrl}/${id}`, getAuthHeader());
+    const res = await axios.delete(`${baseUrl}/delete/${id}`, getAuthHeader());
     return res;
   };
   
   export const bookCourse = async (id) => {
-    const res = await axios.post(`${baseUrl}/${id}/book`, null, getAuthHeader());
+    const res = await axios.put(`${baseUrl}/book/${id}`, null, getAuthHeader());
     return res;
   };
   
   export const cancelBooking = async (id) => {
-    const res = await axios.delete(`${baseUrl}/${id}/book`, getAuthHeader());
+    const res = await axios.put(`${baseUrl}/unbook/${id}`, null, getAuthHeader());
     return res;
   };

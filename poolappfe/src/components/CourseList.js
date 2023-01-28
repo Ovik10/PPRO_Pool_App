@@ -15,6 +15,7 @@ const CourseList = () => {
 
   return (
     <div>
+      <h1>Courses</h1>
       {courses.map((course) => (
         <CourseDetail key={course.id} course={course} />
       ))}

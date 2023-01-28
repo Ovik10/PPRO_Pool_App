@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { createCourse, updateCourse } from '../services/courses';
+import { useParams, Navigate } from 'react-router-dom';
+import { createCourse, updateCourse, deleteCourse } from '../services/courses';
 import { getCourseById } from '../services/courses';
 
 const findCourse = async (id) => {
@@ -8,9 +8,11 @@ const findCourse = async (id) => {
   return selected;
 }
 
+
 const CourseForm = () => {
 
   const params = useParams();
+
 
   useEffect(() => {
     if (params.id) {
@@ -38,7 +40,6 @@ const CourseForm = () => {
   const [beginDate, setDate] = useState('');
   const [price, setPrice] = useState('');
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const course = { name, description, beginDate, price, capacity };
@@ -51,8 +52,9 @@ const CourseForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <h1>Course</h1>
       <label>
-        Name:
+        Name
         <input
           type="text"
           value={name}
@@ -61,7 +63,7 @@ const CourseForm = () => {
       </label>
       <br />
       <label>
-        Description:
+        Description
         <input
           type="text"
           value={description}
@@ -70,7 +72,7 @@ const CourseForm = () => {
       </label>
       <br />
       <label>
-        Capacity:
+        Capacity
         <input
           type="number"
           value={capacity}
@@ -79,7 +81,7 @@ const CourseForm = () => {
       </label>
       <br />
       <label>
-        Begin Date:
+        Begin Date
         <input
           type="datetime-local"
           value={beginDate}
@@ -88,13 +90,14 @@ const CourseForm = () => {
       </label>
       <br />
       <label>
-        Price:
+        Price
         <input
           type="number"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
       </label>
+      <br/>
       <button type="submit">
         {params.id ? (
           <>
@@ -106,6 +109,12 @@ const CourseForm = () => {
           </>
         )}
       </button>
+      {params.id ? (
+        <button class="danger">Delete course</button>
+      ):(
+        ''
+      )
+    }
     </form>
   );
 };
