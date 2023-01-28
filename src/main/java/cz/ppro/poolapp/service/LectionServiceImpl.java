@@ -152,15 +152,17 @@ public class LectionServiceImpl implements LectionService {
         if (!l.getUsersBooked().contains(userEmail)) {
             lectionRepository.save(l).setId(id);
             userRepository.save(u);
-            return "Already unbooked";
-        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Already unbooked"
+            );
+        }
             l.setCapacity(l.getCapacity() + 1);
             u.setCredits(u.getCredits() + l.getPrice());
             l.getUsersBooked().remove(userEmail);
             lectionRepository.save(l).setId(id);
             userRepository.save(u);
             return "Unbooked";
-        }
+
     }
     @Scheduled(cron = "0 0 18 * * *")
     @Override
