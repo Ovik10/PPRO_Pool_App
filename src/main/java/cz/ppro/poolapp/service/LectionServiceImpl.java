@@ -1,5 +1,6 @@
 package cz.ppro.poolapp.service;
 
+import cz.ppro.poolapp.config.ErrorHandler;
 import cz.ppro.poolapp.config.JwtService;
 import cz.ppro.poolapp.model.Lection;
 import cz.ppro.poolapp.model.LectionType;
@@ -105,20 +106,21 @@ public class LectionServiceImpl implements LectionService {
         User u = userRepository.findByEmail(userEmail).orElse(null);
         final LocalDateTime beginDate = convertToLocalDateTimeViaInstant(l.getBeginDate());
         if (u.getCredits() - l.getPrice() < 0) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
+            new ErrorHandler.ExceptionRestResponse(
+                    404,
+            "jsi hříbek");
         }
 
         if (l.getCapacity() - 1 < 0) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
+            new ErrorHandler.ExceptionRestResponse(
+                    404,
+                    "jsi hříbek");
         }
 
         if (localDate.isAfter(beginDate)) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "entity not found");
-
-
+            new ErrorHandler.ExceptionRestResponse(
+                    404,
+                    "jsi hříbek");
         }
 
         if (l.getUsersBooked().contains(userEmail)) {
