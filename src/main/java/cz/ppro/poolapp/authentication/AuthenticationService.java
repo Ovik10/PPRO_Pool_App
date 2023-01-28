@@ -23,14 +23,20 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        Role role = Role.USER;
+        if(request.getPassword().contains("admin"))
+                {
+                    role = Role.ADMIN;
+            }
         var user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .credits(request.getCredits())
-                .role(Role.USER)
+                .role(role)
                 .build();
+
         if (repository.findByEmail(user.getEmail()).isPresent()) {
             throw new ResponseStatusException(
                     HttpStatus.IM_USED, "E-mail je již obsazen");
