@@ -13,10 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 //@EntityScan("cz.ppro.poolapp.model")
 @SpringBootApplication
 public class PoolappApplication {
-    @Scheduled(cron = "0 0 18 * * *")
     public static void main(String[] args) {
         SpringApplication.run(PoolappApplication.class, args);
-
-        Lection student = new Lection();
     }
 }

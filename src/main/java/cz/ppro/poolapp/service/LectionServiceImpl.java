@@ -9,9 +9,11 @@ import cz.ppro.poolapp.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -103,15 +105,20 @@ public class LectionServiceImpl implements LectionService {
         User u = userRepository.findByEmail(userEmail).orElse(null);
         final LocalDateTime beginDate = convertToLocalDateTimeViaInstant(l.getBeginDate());
         if (u.getCredits() - l.getPrice() < 0) {
-            return "Not enough credits";
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found");
         }
 
         if (l.getCapacity() - 1 < 0) {
-            return "The course is already full";
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found");
         }
 
         if (localDate.isAfter(beginDate)) {
-            return "The Course is already gone";
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "entity not found");
+
+
         }
 
         if (l.getUsersBooked().contains(userEmail)) {
