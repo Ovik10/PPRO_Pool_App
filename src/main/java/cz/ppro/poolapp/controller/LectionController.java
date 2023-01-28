@@ -37,6 +37,11 @@ public class LectionController {
     public String update(@RequestBody Lection lection, @PathVariable int id) {
         return lectionService.updateLection(lection, id);
     }
+    @PutMapping("/daily")
+    public void dailyUpdate() {
+        lectionService.dailyUpdate();
+
+    }
 
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable int id) {

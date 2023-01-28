@@ -2,16 +2,24 @@ package cz.ppro.poolapp.service;
 
 import cz.ppro.poolapp.config.JwtService;
 import cz.ppro.poolapp.model.Lection;
+import cz.ppro.poolapp.model.LectionType;
 import cz.ppro.poolapp.model.User;
 import cz.ppro.poolapp.repository.LectionRepository;
 import cz.ppro.poolapp.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +53,6 @@ public class LectionServiceImpl implements LectionService {
 
     @Override
     public List<Lection> getAllLections() {
-
         return lectionRepository.findAll();
     }
 
@@ -143,5 +150,28 @@ public class LectionServiceImpl implements LectionService {
             userRepository.save(u);
             return "Unbooked";
         }
+    }
+    @Scheduled(cron = "0 0 18 * * *")
+    @Override
+    public void dailyUpdate() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.HOUR_OF_DAY, 14);
+        Lection lection1 = new Lection(10000, LectionType.WHIRLPOOL, "Whirlpool","Whirlpool session", cal.getTime(),100,5,null);
+        Lection lection3 = new Lection(10002, LectionType.SAUNA, "Sauna","Sauna session", cal.getTime(),100,5,null);
+        lectionRepository.save(lection1);
+        lectionRepository.save(lection3);
+        cal.add(Calendar.HOUR_OF_DAY, 1);
+        Lection lection2 = new Lection(10001, LectionType.WHIRLPOOL, "Whirlpool","Whirlpool session", cal.getTime(),100,5,null);
+        Lection lection4 = new Lection(10003, LectionType.SAUNA, "Sauna","Sauna session", cal.getTime(),100,5,null);
+        lectionRepository.save(lection2);
+        lectionRepository.save(lection4);
+
+
+
+
+
+
+
     }
 }

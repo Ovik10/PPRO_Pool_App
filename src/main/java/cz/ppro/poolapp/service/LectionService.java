@@ -7,18 +7,20 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LectionService {
-    public String saveLection(Lection lection);
+    String saveLection(Lection lection);
 
-    public List<Lection> getAllLections();
+    List<Lection> getAllLections();
 
-    public String updateLection(Lection lection, int id);
+    String updateLection(Lection lection, int id);
 
-    public void deleteLection(int id);
+    void deleteLection(int id);
 
-    public Optional<Lection> getLection(int id);
+    Optional<Lection> getLection(int id);
 
-    public String book(Lection lection, int id, HttpServletRequest request);
+    String book(Lection lection, int id, HttpServletRequest request);
 
-    public String unbook(Lection lection, int id, HttpServletRequest request);
+    String unbook(Lection lection, int id, HttpServletRequest request);
+
+    void dailyUpdate();
 
 }

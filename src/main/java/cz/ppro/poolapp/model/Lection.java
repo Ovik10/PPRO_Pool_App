@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -23,13 +24,15 @@ public class Lection {
     @Id
     @GeneratedValue
     private int id;
+    @Enumerated(EnumType.STRING)
+    private LectionType lectionType;
     @NotBlank
     private String name;
     @NotBlank
     private String description;
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm")
     private Date beginDate;
     private int price;
     @NotNull
