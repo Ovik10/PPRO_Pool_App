@@ -116,7 +116,7 @@ const App = () => {
           <LoginPage onLogin={handleLogin} />}
         />
         <Route exact path="/user" element=
-          {user && user.role == "USER" ? (
+          {user ? (
             <UserForm user={user} onUpdateUser={handleUpdateUser} />
           ) : (
             <Navigate to="/login" />
@@ -143,14 +143,14 @@ const App = () => {
         <Route path="course/:id" element={<CourseDetail onFindCourse={handleSelectCourse} />}
         />
         <Route exact path="/courses/add" element=
-          {user && user.role == "USER" ? (
+          {user && user.role == "ADMIN" ? (
             <CourseForm onCreateCourse={handleCreateCourse} />
           ) : (
             <Navigate to="/courses" />
           )}
         />
         <Route exact path="/course/update/:id" element=
-          {user && user.role == "USER" ? (
+          {user && user.role == "ADMIN" ? (
             <CourseForm
               onUpdateCourse={handleUpdateCourse}
             />
