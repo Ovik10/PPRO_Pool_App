@@ -10,20 +10,27 @@ const Navbar = ({ user, setUser }) => {
 
   return (
     <nav>
+      <Link to="/" className='logo'>&#126; Pool app &#126;</Link>
       {user ? (
         <>
-          <Link to="/courses">Courses</Link>
-          <Link to="/courses/add">Add course</Link>
+        <div>
+          <Link to="/courses"> Courses</Link>
+          <Link to="/courses/add">+ Add course</Link>
+        </div>
+        <div>
           <Link to="/user">Edit profile</Link>
-          <button onClick={handleLogout}>Logout</button>
+          <Link to="/add_credits">Add credits</Link>
+          <button onClick={handleLogout}>Logout &#187;</button>
+          </div>
         </>
       ) : (
         <>
+        <div>
           <Link to="/register">Register</Link>
           <Link to="/login">Login</Link>
+          </div>
         </>
       )}
-      <br /><br />
     </nav>
   );
 };

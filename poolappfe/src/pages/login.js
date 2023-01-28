@@ -12,16 +12,18 @@ function LoginPage(props) {
 
   return (
     <form onSubmit={handleSubmit}>
+      <h1>Login</h1>
       <label>
-        Email:<br />
+        Email
         <input type="text" name="email" />
       </label>
-      <br /><br />
+      <br/>
       <label>
-        Password:<br />
+        Password
         <input type="password" name="password" />
       </label>
-      <br /><br />
+      <br/>
+
       <button type="submit">Log in</button>
     </form>
   );

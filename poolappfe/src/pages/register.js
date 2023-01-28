@@ -12,27 +12,28 @@ function RegisterPage(props) {
 
   return (
     <form onSubmit={handleSubmit}>
+      <h1>Register</h1>
+
       <label>
-        First name:
-        <br />
+        First name
+      
         <input type="text" name="firstname" />
-      </label><br /><br />
+      </label><br />
       <label>
-        Last name:
+        Last name
         <br />
         <input type="text" name="lastname" />
-      </label><br /><br />
+      </label><br />
       <label>
-        Email:
+        Email
         <br />
         <input type="text" name="email" />
-      </label><br /><br />
+      </label><br />
       <label>
-        Password:
+        Password
         <br />
         <input type="password" name="password" />
       </label>
-      <br />
       <br />
       <button type="submit">Register</button>
     </form>

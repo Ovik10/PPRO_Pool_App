@@ -13,6 +13,7 @@ import {
   register,
   getCurrentUser,
   putUser,
+  addCredits,
 } from './services/auth';
 
 import {
@@ -54,6 +55,7 @@ const App = () => {
   const handleLogin = async (email, password) => {
     const res = await login(email, password);
     setUser(res);
+    <Navigate to="/courses" />
   };
 
   const getCourses = async () => {
@@ -89,6 +91,12 @@ const App = () => {
     console.log(selected)
     return selected;
   };
+  const handleAddCredits = async () => {
+    const res = await addCredits();
+
+  };
+
+  
 
   return (
     <Router>
@@ -96,7 +104,7 @@ const App = () => {
       <Routes>
         <Route exact path="/" element=
           {user ? (
-            <Navigate to="/home" />
+            <Navigate to="/courses" />
           ) : (
             <Navigate to="/login" />
           )}
@@ -111,7 +119,17 @@ const App = () => {
           {user && user.role == "USER" ? (
             <UserForm user={user} onUpdateUser={handleUpdateUser} />
           ) : (
-            <Navigate to="/fwed" />
+            <Navigate to="/login" />
+          )}
+        />
+        <Route exact path="/add_credits" element=
+        {user ? (
+          <div>
+            <br/>
+            <button onClick={handleAddCredits}>Add 100 credits</button>
+          </div>
+          ) : (
+            <Navigate to="/login" />
           )}
         />
         <Route exact path="/courses" element={
@@ -131,7 +149,7 @@ const App = () => {
             <Navigate to="/courses" />
           )}
         />
-        <Route exact path="/courses/update/:id" element=
+        <Route exact path="/course/update/:id" element=
           {user && user.role == "USER" ? (
             <CourseForm
               onUpdateCourse={handleUpdateCourse}

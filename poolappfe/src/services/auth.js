@@ -36,6 +36,18 @@ export const putUser = async (user) => {
   return res;
 };
 
+export const deleteUser = async (id) => {
+  const res = await axios.delete(`${baseUrl}/delete/${id}`, getAuthHeader());
+  return res;
+};
+
+
 export const getAuthHeader = () => {
   return { headers: { Authorization: `Bearer ${getCurrentUser().token}` } };
+};
+
+export const addCredits = async (user) => {
+  const res = await axios.put(`${baseUrl}/increase`, null, getAuthHeader());
+  console.log(res);
+  return res;
 };
