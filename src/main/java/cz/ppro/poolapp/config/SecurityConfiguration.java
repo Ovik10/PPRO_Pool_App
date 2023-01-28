@@ -1,6 +1,5 @@
 package cz.ppro.poolapp.config;
 
-import cz.ppro.poolapp.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +20,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http    .cors()
+        http.cors()
                 .and()
                 .csrf()
                 .disable()

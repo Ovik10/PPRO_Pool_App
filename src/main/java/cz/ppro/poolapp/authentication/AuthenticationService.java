@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,11 +31,11 @@ public class AuthenticationService {
                 .credits(request.getCredits())
                 .role(Role.USER)
                 .build();
-        if(repository.findByEmail(user.getEmail()).isPresent()){
+        if (repository.findByEmail(user.getEmail()).isPresent()) {
             throw new ResponseStatusException(
                     HttpStatus.IM_USED, "E-mail je již obsazen");
         } else {
-        repository.save(user);
+            repository.save(user);
             var jwtToken = jwtService.generateToken(user);
             return AuthenticationResponse.builder()
                     .token(jwtToken)
@@ -45,8 +44,10 @@ public class AuthenticationService {
                     .firstname(user.getFirstname())
                     .lastname(user.getLastname())
                     .role(user.getRole())
-                    .build();}
+                    .build();
+        }
     }
+
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -55,8 +56,8 @@ public class AuthenticationService {
                 )
         );
         var user = repository.findByEmail(request.getEmail())
-                .orElseThrow(()-> new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, "Vámi zadaný email neexistuje"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "Vámi zadaný email neexistuje"));
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -68,7 +69,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    public void deleteUser(HttpServletRequest request){
+    public void deleteUser(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
@@ -76,26 +77,30 @@ public class AuthenticationService {
         userEmail = jwtService.extractUsername(jwt);
         repository.deleteById(userEmail);
     }
-    public UpdateUserResponse updateUser(User user, HttpServletRequest request){
+
+    public UpdateUserResponse updateUser(User user, HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractUsername(jwt);
-            User u = repository.findByEmail(userEmail).orElse(null);
-            u.setFirstname(user.getFirstname());
-            u.setLastname(user.getLastname());
-            if(user.getPassword() != null) {
-            u.setPassword(passwordEncoder.encode(user.getPassword()));}
-                    repository.save(u);
+        User u = repository.findByEmail(userEmail).orElse(null);
+        u.setFirstname(user.getFirstname());
+        u.setLastname(user.getLastname());
+        if (user.getPassword() != null) {
+            u.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        repository.save(u);
         return UpdateUserResponse.builder()
                 .credits(u.getCredits())
                 .email(u.getEmail())
                 .firstname(u.getFirstname())
                 .lastname(u.getLastname())
                 .role(u.getRole())
-                .build();}
-    public void increaseCredits(HttpServletRequest request) {
+                .build();
+    }
+
+    public IncreaseCreditsResponse increaseCredits(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
@@ -104,7 +109,11 @@ public class AuthenticationService {
         User u = repository.findByEmail(userEmail).orElse(null);
         u.setCredits(u.getCredits() + 100);
         repository.save(u);
+        return IncreaseCreditsResponse.builder()
+                .credits(u.getCredits())
+                .email(u.getEmail())
+                .build();
     }
 
-    }
+}
 
