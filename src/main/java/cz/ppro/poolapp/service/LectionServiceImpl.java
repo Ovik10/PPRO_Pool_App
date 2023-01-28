@@ -98,6 +98,7 @@ public class LectionServiceImpl implements LectionService {
         if (u.getCredits() - l.getPrice() < 0) {
             return "Not enough credits";
         }
+
         if (l.getCapacity() - 1 < 0) {
             return "The course is already full";
         }
