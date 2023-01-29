@@ -37,7 +37,7 @@ public class Lection {
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm")
     private Date beginDate;
     private int price;
-    @NotEmpty
+    @NotNull
     private int capacity;
     @ElementCollection
     private List<String> usersBooked;

@@ -37,15 +37,32 @@ public class LectionServiceImpl implements LectionService {
 
     @Override
     public String saveLection(Lection lection) {
+        if(lection.getName().isEmpty() || lection.getDescription().isEmpty() || lection.getBeginDate().equals("") || lection.getCapacity() == 0 ||lection.getPrice() == 0)
+        {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "You must fill all the fields"
+            );
+        }
+        LocalDateTime beginDate = LocalDateTime.now();
         LocalDateTime localDate = LocalDateTime.now();
-        final LocalDateTime beginDate = convertToLocalDateTimeViaInstant(lection.getBeginDate());
+        if(!lection.getBeginDate().equals(""))
+        {
+            beginDate = convertToLocalDateTimeViaInstant(lection.getBeginDate());}
         if (localDate.isAfter(beginDate)) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Course must be in a future"
             );
         }
-            lectionRepository.save(lection);
-            return "Course has been added";
+        if(lection.getPrice() < 0)
+        {throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "Price must be >= 0"
+        );}
+        if(lection.getCapacity() < 1)
+        {throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "Capacity must be > 0"
+        );}
+        lectionRepository.save(lection);
+        return "Course has been added";
 
     }
 
@@ -61,17 +78,17 @@ public class LectionServiceImpl implements LectionService {
 
     @Override
     public String updateLection(Lection lection, int id) {
-        if(lection.getName().isEmpty() || lection.getDescription().isEmpty() || lection.getBeginDate().equals(null) || lection.getCapacity() == 0 ||lection.getPrice() == 0)
+        if(lection.getName().isEmpty() || lection.getDescription().isEmpty() || lection.getBeginDate().equals("") || lection.getCapacity() == 0 ||lection.getPrice() == 0)
         {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "You must fill all the fields"
             );
         }
-        LocalDateTime beginDate = null;
+        LocalDateTime beginDate = LocalDateTime.now();
         LocalDateTime localDate = LocalDateTime.now();
-        if(!lection.getBeginDate().equals(null))
+        if(!lection.getBeginDate().equals(""))
         {
-        beginDate = convertToLocalDateTimeViaInstant(lection.getBeginDate());}
+            beginDate = convertToLocalDateTimeViaInstant(lection.getBeginDate());}
         if (localDate.isAfter(beginDate)) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Course must be in a future"
@@ -87,14 +104,14 @@ public class LectionServiceImpl implements LectionService {
                 HttpStatus.BAD_REQUEST, "Capacity must be > 0"
         );}
 
-            Lection l = lectionRepository.findById(id).get();
-            l.setName(lection.getName());
-            l.setCapacity(lection.getCapacity());
-            l.setBeginDate(lection.getBeginDate());
-            l.setPrice(lection.getPrice());
-            l.setDescription(lection.getDescription());
-            lectionRepository.save(l);
-            return "Course has been updated";
+        Lection l = lectionRepository.findById(id).get();
+        l.setName(lection.getName());
+        l.setCapacity(lection.getCapacity());
+        l.setBeginDate(lection.getBeginDate());
+        l.setPrice(lection.getPrice());
+        l.setDescription(lection.getDescription());
+        lectionRepository.save(l);
+        return "Course has been updated";
 
     }
 
@@ -147,14 +164,14 @@ public class LectionServiceImpl implements LectionService {
             );
         }
 
-            l.setCapacity(l.getCapacity() - 1);
-            u.setCredits(u.getCredits() - l.getPrice());
-            l.getUsersBooked().add(userEmail);
-            lectionRepository.save(l).setId(id);
-            userRepository.save(u);
-            return "Booked";
+        l.setCapacity(l.getCapacity() - 1);
+        u.setCredits(u.getCredits() - l.getPrice());
+        l.getUsersBooked().add(userEmail);
+        lectionRepository.save(l).setId(id);
+        userRepository.save(u);
+        return "Booked";
 
-        }
+    }
 
 
     @Override
@@ -173,12 +190,12 @@ public class LectionServiceImpl implements LectionService {
                     HttpStatus.NOT_FOUND, "Already unbooked"
             );
         }
-            l.setCapacity(l.getCapacity() + 1);
-            u.setCredits(u.getCredits() + l.getPrice());
-            l.getUsersBooked().remove(userEmail);
-            lectionRepository.save(l).setId(id);
-            userRepository.save(u);
-            return "Unbooked";
+        l.setCapacity(l.getCapacity() + 1);
+        u.setCredits(u.getCredits() + l.getPrice());
+        l.getUsersBooked().remove(userEmail);
+        lectionRepository.save(l).setId(id);
+        userRepository.save(u);
+        return "Unbooked";
 
     }
     @Scheduled(cron = "0 0 18 * * *")
