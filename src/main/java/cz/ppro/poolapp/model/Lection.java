@@ -3,6 +3,7 @@ package cz.ppro.poolapp.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,7 +37,7 @@ public class Lection {
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm")
     private Date beginDate;
     private int price;
-    @NotNull
+    @NotEmpty
     private int capacity;
     @ElementCollection
     private List<String> usersBooked;

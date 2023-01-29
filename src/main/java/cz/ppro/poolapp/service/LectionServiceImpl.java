@@ -61,13 +61,32 @@ public class LectionServiceImpl implements LectionService {
 
     @Override
     public String updateLection(Lection lection, int id) {
+        if(lection.getName().isEmpty() || lection.getDescription().isEmpty() || lection.getBeginDate().equals(null) || lection.getCapacity() == 0 ||lection.getPrice() == 0)
+        {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "You must fill all the fields"
+            );
+        }
+        LocalDateTime beginDate = null;
         LocalDateTime localDate = LocalDateTime.now();
-        final LocalDateTime beginDate = convertToLocalDateTimeViaInstant(lection.getBeginDate());
+        if(!lection.getBeginDate().equals(null))
+        {
+        beginDate = convertToLocalDateTimeViaInstant(lection.getBeginDate());}
         if (localDate.isAfter(beginDate)) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Course must be in a future"
             );
         }
+
+        if(lection.getPrice() < 0)
+        {throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "Price must be >= 0"
+        );}
+        if(lection.getCapacity() < 1)
+        {throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "Capacity must be > 0"
+        );}
+
             Lection l = lectionRepository.findById(id).get();
             l.setName(lection.getName());
             l.setCapacity(lection.getCapacity());
