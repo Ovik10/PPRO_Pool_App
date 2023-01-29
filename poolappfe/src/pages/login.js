@@ -15,7 +15,7 @@ function LoginPage(props) {
       <h1>Login</h1>
       <label>
         Email
-        <input type="text" name="email" />
+        <input type="email" name="email" />
       </label>
       <br/>
       <label>

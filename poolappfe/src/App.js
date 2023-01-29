@@ -56,7 +56,8 @@ const App = () => {
       const res = await register(firstname, lastname, email, password);
       localStorage.setItem('user', JSON.stringify(res.data));
       setUser(res.data);
-    } catch (error) { alert(error.response.data.message) }
+    } catch (error) { alert(error.response ? error.response.data.message : error) }
+
   };
 
   const handleLogin = async (email, password) => {
@@ -64,32 +65,35 @@ const App = () => {
       const res = await login(email, password);
       localStorage.setItem('user', JSON.stringify(res.data));
       setUser(res.data);
-    } catch (error) {
-      alert(error.response.data.message)
-    }
+    } catch (error) { alert(error.response ? error.response.data.message : error) }
+
   };
 
   const getCourses = async () => {
-    const res = await getCourses();
-    setCourses(res.data);
-    return res.data;
+    try {
+      const res = await getCourses();
+      setCourses(res.data);
+      return res.data;
+    } catch (error) { alert(error.response ? error.response.data.message : error) }
+
   };
 
   const handleCreateCourse = async (course) => {
-    const res = await createCourse(course);
-    setCourses([...courses, res.data]);
+    try {
+      const res = await createCourse(course);
+      setCourses([...courses, res.data]);
+    } catch (error) { alert(error.response ? error.response.data.message : error) }
+
   };
 
   const handleUpdateCourse = async (id, course) => {
-    await updateCourse(id, course);
-    const updatedCourses = courses.map((l) => (l.id === id ? course : l));
-    setCourses(updatedCourses);
-  };
+    try {
 
-  const handleDeleteCourse = async (id) => {
-    await deleteCourse(id);
-    const updatedCourses = courses.filter((l) => l.id !== id);
-    setCourses(updatedCourses);
+      await updateCourse(id, course);
+      const updatedCourses = courses.map((l) => (l.id === id ? course : l));
+      setCourses(updatedCourses);
+    } catch (error) { alert(error.response ? error.response.data.message : error) }
+
   };
 
   const handleUpdateUser = async () => {
@@ -97,12 +101,15 @@ const App = () => {
   };
 
   const handleUpdateBook = async () => {
-    const newUser = await getUser();
-    newUser["token"] = user.token;
+    try {
 
-    setUser(newUser.data);
-
-    console.log("sranda")
+      const newUser = await getUser();
+      
+      newUser.data["token"] = user.token
+      
+      setUser(newUser.data);
+    
+    } catch (error) { alert(error.response ? error.response.data.message : error) }
   };
 
   const handleAddCredits = async () => {
@@ -117,8 +124,12 @@ const App = () => {
   };
 
   const handleDeleteUser = async () => {
-    const res = await deleteUser();
-    setUser(null);
+    try {
+      const res = await deleteUser();
+      setUser(null);
+      
+    } catch (error) {  alert(error.response ? error.response.data.message : error)}
+
   };
 
 

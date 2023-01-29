@@ -121,6 +121,11 @@ h1 {
   }
 }
 
+.course.row div {
+  display: flex;
+  flex-flow: column;
+}
+
 nav div {
   display: flex;
   flex-wrap: wrap;

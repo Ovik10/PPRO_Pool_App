@@ -60,7 +60,7 @@ const CourseDetail = ({ course, onUpdateBookCredits }) => {
         setSelected(updated.data);
         setIsBooked(false);
         await onUpdateBookCredits();
-      } catch (error) { alert(error.response.data.message) }
+      } catch (error) { alert(error.response ? error.response.data.message : error) }
     }
     else {
       try {
@@ -69,23 +69,39 @@ const CourseDetail = ({ course, onUpdateBookCredits }) => {
         setSelected(updated.data);
         setIsBooked(true);
         await onUpdateBookCredits();
-      } catch (error) { alert(error.response.data.message) }
+      } catch (error) { alert(error.response ? error.response.data.message : error) }
+
 
     }
   };
 
   return (
-    <div className='course'>
+    <div className={`course ${params.id ? 'row' : ''}`}>
       <div>
         <h3>{selected.name}</h3>
         <p>{formatDate(selected.beginDate)}</p>
         <p>{params.id ? selected.description : shorten(selected.description)}</p>
         <p>Capacity: {selected.capacity}</p>
         <p>Price: {selected.price}</p>
+        {params.id ?
+          <p>Users booked:
+
+            {
+              selected.usersBooked ?
+                selected.usersBooked.map(user => (
+                  <div>{user}</div>
+                ))
+                : ""
+            }
+
+          </p>
+          :
+          ""
+        }
       </div>
       <div>
         {params.id ?
-          <p>Users booked: {selected.usersBooked}</p>
+         ""
           :
           <Link to={"/course/" + selected.id}>View more</Link>
         }
