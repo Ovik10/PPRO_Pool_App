@@ -3,22 +3,13 @@ import axios from 'axios';
 const baseUrl = 'http://localhost:8080/auth';
 
 export const login = async (email, password) => {
-  const res = await axios.post(`${baseUrl}/authenticate`, { email, password }).catch(function (error) {
-    console.log(error.toJSON());
-  });
-  console.log(JSON.stringify(res.data));
-  localStorage.setItem('user', JSON.stringify(res.data));
-  return res.data;
-};
+    const res = await axios.post(`${baseUrl}/authenticate`, { email, password });
+    return res;
+  }
 
 export const register = async (firstname, lastname, email, password) => {
-  console.log(firstname, lastname, email, password);
-  const res = await axios.post(`${baseUrl}/register`, {firstname, lastname, email, password }).catch(function (error) {
-    console.log(error.toJSON());
-  });
-  console.log(JSON.stringify(res.data));
-  localStorage.setItem('user', JSON.stringify(res.data));
-  return res.data;
+  const res = await axios.post(`${baseUrl}/register`, { firstname, lastname, email, password });
+  return res;
 };
 
 export const logout = () => {
@@ -30,14 +21,12 @@ export const getCurrentUser = () => {
 };
 
 export const putUser = async (user) => {
-  console.log("fewfwefewfwefwefwefwefwe")
   const res = await axios.put(`${baseUrl}/update`, user, getAuthHeader());
-  console.log(res);
   return res;
 };
 
-export const deleteUser = async (id) => {
-  const res = await axios.delete(`${baseUrl}/delete/${id}`, getAuthHeader());
+export const deleteUser = async () => {
+  const res = await axios.delete(`${baseUrl}/delete`, getAuthHeader());
   return res;
 };
 
@@ -48,6 +37,10 @@ export const getAuthHeader = () => {
 
 export const addCredits = async (user) => {
   const res = await axios.put(`${baseUrl}/increase`, null, getAuthHeader());
-  console.log(res);
+  return res;
+};
+
+export const getUser = async () => {
+  const res = await axios.get(`${baseUrl}/get`, getAuthHeader());
   return res;
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { logout } from '../services/auth';
+import { getCurrentUser, logout } from '../services/auth';
 
 const Navbar = ({ user, setUser }) => {
   const handleLogout = () => {
@@ -11,7 +11,7 @@ const Navbar = ({ user, setUser }) => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    // Update the document title using the browser API
+    user = getCurrentUser();
     setIsAdmin(false)
     if (user && user.role == "ADMIN") {
       setIsAdmin(true);
@@ -28,7 +28,7 @@ const Navbar = ({ user, setUser }) => {
             {isAdmin ? (
               <Link to="/courses/add">+ Add course</Link>
             ) : (
-              <Link to="/add_credits">Add credits</Link>
+              <Link to="/add_credits">Add credits ({user.credits})</Link>
             )}
             <Link to="/user">Edit profile</Link>
             <button onClick={handleLogout}>Logout &#187;</button>

@@ -10,14 +10,12 @@ const findCourse = async (id) => {
 }
 
 const shorten = (str) => {
-  if(str){
+  if (str) {
     return (str.length > 8) ? str.slice(0, 7) + '...' : str;
   }
 };
 
 const formatDate = (d) => {
-  console.log(d)
-  
   const date = new Date(d);
   const formattedDate = date.toLocaleString('en-US', {
     year: 'numeric',
@@ -30,7 +28,7 @@ const formatDate = (d) => {
   return formattedDate;
 }
 
-const CourseDetail = ({ course }) => {
+const CourseDetail = ({ course, onUpdateBookCredits }) => {
 
   const params = useParams();
   const [selected, setSelected] = useState('');
@@ -56,23 +54,28 @@ const CourseDetail = ({ course }) => {
 
   const book = async () => {
     if (isBooked) {
-      const res = await cancelBooking(selected.id);
-      console.log(res);
-      const updated = await findCourse(selected.id);
-      setSelected(updated.data);
-      setIsBooked(false);
+      try {
+        const res = await cancelBooking(selected.id);
+        const updated = await findCourse(selected.id);
+        setSelected(updated.data);
+        setIsBooked(false);
+        await onUpdateBookCredits();
+      } catch (error) { alert(error.response.data.message) }
     }
     else {
-      const res = await bookCourse(selected.id);
-      console.log(res);
-      const updated = await findCourse(selected.id);
-      setSelected(updated.data);
-      setIsBooked(true);
+      try {
+        const res = await bookCourse(selected.id);
+        const updated = await findCourse(selected.id);
+        setSelected(updated.data);
+        setIsBooked(true);
+        await onUpdateBookCredits();
+      } catch (error) { alert(error.response.data.message) }
+
     }
   };
 
   return (
-    <div className="course">
+    <div className='course'>
       <div>
         <h3>{selected.name}</h3>
         <p>{formatDate(selected.beginDate)}</p>
@@ -81,12 +84,16 @@ const CourseDetail = ({ course }) => {
         <p>Price: {selected.price}</p>
       </div>
       <div>
-        <Link to={"/course/" + selected.id}>View more</Link>
+        {params.id ?
+          <p>Users booked: {selected.usersBooked}</p>
+          :
+          <Link to={"/course/" + selected.id}>View more</Link>
+        }
         {currentUser.role == "ADMIN" ? (
           <Link to={"/course/update/" + selected.id}>Edit</Link>
         ) : (
-          <button onClick={book}>
-            {isBooked ? "Cancel Booking" : "Book"}
+          <button className={isBooked ? 'admin' : null} onClick={book}>
+            {isBooked ? "Unbook" : "Book"}
           </button>
         )}
       </div>
