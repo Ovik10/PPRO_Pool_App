@@ -18,17 +18,12 @@ export const getCourseById = async (id) => {
   };
   
   export const createCourse = async (course) => {
-    console.log(course);
-    const res = await axios.post(`${baseUrl}/add`, course, getAuthHeader()).catch(function (error) {
-        console.log(error.toJSON());
-      });
-      console.log(JSON.stringify(res.data));
+    const res = await axios.post(`${baseUrl}/add`, course, getAuthHeader());
     return res;
   };
   
   export const updateCourse = async (id, course) => {
     const res = await axios.put(`${baseUrl}/update/${id}`, course, getAuthHeader());
-    console.log(res)
     return res;
   };
   

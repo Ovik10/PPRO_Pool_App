@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { deleteUser, putUser } from '../services/auth';
+import { putUser } from '../services/auth';
 
-const UserForm = ({ user }) => {
+const UserForm = ({ user, onDeleteProfile, onUpdateUser }) => {
   const [firstname, setFirstName] = useState(user.firstname);
   const [lastname, setLastName] = useState(user.lastname);
   const [password, setPassword] = useState(user.password);
@@ -9,11 +9,21 @@ const UserForm = ({ user }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedUser = { firstname, lastname, password };
-    await putUser(updatedUser);
+    try {
+      const updatedUser = { firstname, lastname, password };
+      var newUser = await putUser(updatedUser);
+      newUser.data['token'] = user.token
+      localStorage.setItem('user', JSON.stringify(newUser.data));
+      await onUpdateUser();
+      alert('Profile updated');
+    } catch (error) {
+      alert('An error occurred: '+error);
+    }
   };
   const deleteMe = async (e) => {
-    await deleteUser(user.id);
+    e.preventDefault();
+
+    await onDeleteProfile();
   };
   const toggleVisibility = () => {
     toggle ? setToggle(false) : setToggle(true);
@@ -25,7 +35,7 @@ const UserForm = ({ user }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h1>Profile</h1>
+      <h1>Profile {user.email}</h1>
       <label>
         First Name:
         <input
@@ -46,16 +56,16 @@ const UserForm = ({ user }) => {
       </label>
       <br />
       <label>
-      <input type="checkbox" name="checkboxtoggle" onClick={toggleVisibility} checked={toggle}></input>
-      
-      Change password
-      
+        <input type="checkbox" name="checkboxtoggle" onChange={toggleVisibility} checked={toggle}></input>
+
+        Change password
+
       </label>
-      <br/>
-      <br/>
+      <br />
+      <br />
       {
         toggle ? (
-        
+
           <label>
             Password
             <input
@@ -64,10 +74,10 @@ const UserForm = ({ user }) => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </label>
-          
+
         ) : ('')
       }
-      
+
       <br />
 
       <button type="submit">Update Profile</button>

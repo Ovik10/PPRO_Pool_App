@@ -44,11 +44,24 @@ const CourseForm = () => {
     e.preventDefault();
     const course = { name, description, beginDate, price, capacity };
     if (params.id) {
-      await updateCourse(params.id,course);
+      try {
+        const res = await updateCourse(params.id, course);
+        alert("Course has been updated")
+      } catch (error) { alert(error.response.data.message) }
     } else {
-      await createCourse(course);
+      try {
+        const res = await createCourse(course);
+        alert("Course has been created")
+      } catch (error) { alert(error.response.data.message) }
     }
   };
+
+  const dropCourse = async (id, e) => {
+    e.preventDefault()
+    await deleteCourse(id);
+    window.location.replace("/courses");
+  }
+
 
   return (
     <form onSubmit={handleSubmit}>
@@ -97,7 +110,7 @@ const CourseForm = () => {
           onChange={(e) => setPrice(e.target.value)}
         />
       </label>
-      <br/>
+      <br />
       <button type="submit">
         {params.id ? (
           <>
@@ -110,11 +123,11 @@ const CourseForm = () => {
         )}
       </button>
       {params.id ? (
-        <button class="danger">Delete course</button>
-      ):(
+        <button class="danger" onClick={(e) => dropCourse(params.id, e)}>Delete course</button>
+      ) : (
         ''
       )
-    }
+      }
     </form>
   );
 };

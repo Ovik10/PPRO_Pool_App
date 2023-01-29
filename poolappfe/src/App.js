@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import logo from './logo.svg';
 import './App.css';
 import {
@@ -6,6 +7,7 @@ import {
   Routes,
   Route,
   Navigate,
+  useNavigate,
 } from 'react-router-dom';
 
 import {
@@ -14,6 +16,8 @@ import {
   getCurrentUser,
   putUser,
   addCredits,
+  deleteUser,
+  getUser,
 } from './services/auth';
 
 import {
@@ -48,14 +52,21 @@ const App = () => {
   }, []);
 
   const handleRegister = async (firstname, lastname, email, password) => {
-    const res = await register(firstname, lastname, email, password);
-    setUser(res);
+    try {
+      const res = await register(firstname, lastname, email, password);
+      localStorage.setItem('user', JSON.stringify(res.data));
+      setUser(res.data);
+    } catch (error) { alert(error.response.data.message) }
   };
 
   const handleLogin = async (email, password) => {
-    const res = await login(email, password);
-    setUser(res);
-    <Navigate to="/courses" />
+    try {
+      const res = await login(email, password);
+      localStorage.setItem('user', JSON.stringify(res.data));
+      setUser(res.data);
+    } catch (error) {
+      alert(error.response.data.message)
+    }
   };
 
   const getCourses = async () => {
@@ -81,22 +92,36 @@ const App = () => {
     setCourses(updatedCourses);
   };
 
-  const handleUpdateUser = async (updatedUser) => {
-    /* const res = await putUser(updatedUser);
-    setUser(res); */
+  const handleUpdateUser = async () => {
+    setUser(getCurrentUser());
   };
 
-  const handleSelectCourse = (id) => {
-    const selected = courses.find((l) => l.id === id);
-    console.log(selected)
-    return selected;
+  const handleUpdateBook = async () => {
+    const newUser = await getUser();
+    newUser["token"] = user.token;
+
+    setUser(newUser.data);
+
+    console.log("sranda")
   };
+
   const handleAddCredits = async () => {
-    const res = await addCredits();
-
+    try {
+      const res = await addCredits();
+      user['credits'] = res.data.credits;
+      localStorage.setItem('user', JSON.stringify(user));
+      setUser(getCurrentUser());
+    } catch (error) {
+      alert(error)
+    }
   };
 
-  
+  const handleDeleteUser = async () => {
+    const res = await deleteUser();
+    setUser(null);
+  };
+
+
 
   return (
     <Router>
@@ -110,52 +135,66 @@ const App = () => {
           )}
         />
         <Route exact path="/register" element={
-          <RegisterPage onRegister={handleRegister} />}
+          user ? (
+            <Navigate to="/courses" />
+          ) : (
+            <RegisterPage onRegister={handleRegister} />
+          )}
         />
         <Route exact path="/login" element={
-          <LoginPage onLogin={handleLogin} />}
+          user ? (
+            <Navigate to="/courses" />
+          ) : (
+            <LoginPage onLogin={handleLogin} />
+          )}
         />
         <Route exact path="/user" element=
           {user ? (
-            <UserForm user={user} onUpdateUser={handleUpdateUser} />
+            <UserForm user={user} onUpdateUser={handleUpdateUser} onDeleteProfile={handleDeleteUser} />
           ) : (
             <Navigate to="/login" />
           )}
         />
         <Route exact path="/add_credits" element=
-        {user ? (
-          <div>
-            <br/>
-            <button onClick={handleAddCredits}>Add 100 credits</button>
-          </div>
+          {user ? (
+            <div>
+              <h1>Get credits</h1>
+              <button onClick={handleAddCredits}>Add 100 credits</button>
+            </div>
           ) : (
             <Navigate to="/login" />
           )}
         />
         <Route exact path="/courses" element={
           user ? (
-            <CourseList courses={courses} />
+            <CourseList courses={courses} onUpdateBook={handleUpdateBook} />
           ) : (
             <Navigate to="/login" />
           )
         }
         />
-        <Route path="course/:id" element={<CourseDetail onFindCourse={handleSelectCourse} />}
+        <Route path="course/:id" element={
+          user ? (
+            <CourseDetail onUpdateBookCredits={handleUpdateBook} />
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
         />
         <Route exact path="/courses/add" element=
           {user && user.role == "ADMIN" ? (
             <CourseForm onCreateCourse={handleCreateCourse} />
           ) : (
-            <Navigate to="/courses" />
+            <Navigate to="/login" />
           )}
         />
         <Route exact path="/course/update/:id" element=
           {user && user.role == "ADMIN" ? (
             <CourseForm
-              onUpdateCourse={handleUpdateCourse}
+              onUpdateBookCredits={handleUpdateCourse}
             />
           ) : (
-            <Navigate to="/courses" />
+            <Navigate to="/login" />
           )}
         />
       </Routes>
