@@ -14,31 +14,30 @@ const CourseForm = () => {
   const params = useParams();
 
 
-  useEffect(() => {
-    if (params.id) {
-      const search = async () => {
-        const res = await findCourse(params.id);
-        setName(res.data.name);
-        setDescription(res.data.description);
-        setDate(res.data.beginDate);
-        setCapacity(res.data.capacity);
-        setPrice(res.data.price);
-      };
-      search();
-    } else {
-      setName('');
-      setDescription('');
-      setDate('');
-      setCapacity('');
-      setPrice('');
-    }
-  }, []);
+
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [capacity, setCapacity] = useState('');
   const [beginDate, setDate] = useState('');
   const [price, setPrice] = useState('');
+
+  useEffect(() => {
+    if (params.id) {
+      const search = async () => {
+        try {
+          const res = await findCourse(params.id);
+          setName(res.data.name);
+          setDescription(res.data.description);
+          setDate(res.data.beginDate);
+          setCapacity(res.data.capacity);
+          setPrice(res.data.price);
+        } catch (error) { alert(error.response ? error.response.data.message : error) }
+      };
+      search();
+    } else {
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,12 +46,14 @@ const CourseForm = () => {
       try {
         const res = await updateCourse(params.id, course);
         alert("Course has been updated")
-      } catch (error) { alert(error.response.data.message) }
+      } catch (error) {  alert(error.response ? error.response.data.message : error)}
+
     } else {
       try {
         const res = await createCourse(course);
         alert("Course has been created")
-      } catch (error) { alert(error.response.data.message) }
+      } catch (error) {  alert(error.response ? error.response.data.message : error)}
+
     }
   };
 
@@ -68,7 +69,7 @@ const CourseForm = () => {
       <h1>Course</h1>
       <label>
         Name
-        <input
+        <input required
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -77,7 +78,7 @@ const CourseForm = () => {
       <br />
       <label>
         Description
-        <input
+        <input required
           type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -86,7 +87,7 @@ const CourseForm = () => {
       <br />
       <label>
         Capacity
-        <input
+        <input required
           type="number"
           value={capacity}
           onChange={(e) => setCapacity(e.target.value)}
@@ -95,7 +96,7 @@ const CourseForm = () => {
       <br />
       <label>
         Begin Date
-        <input
+        <input required
           type="datetime-local"
           value={beginDate}
           onChange={(e) => setDate(e.target.value)}
@@ -104,7 +105,7 @@ const CourseForm = () => {
       <br />
       <label>
         Price
-        <input
+        <input required
           type="number"
           value={price}
           onChange={(e) => setPrice(e.target.value)}

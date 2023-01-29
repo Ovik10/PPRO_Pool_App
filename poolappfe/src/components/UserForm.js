@@ -16,14 +16,14 @@ const UserForm = ({ user, onDeleteProfile, onUpdateUser }) => {
       localStorage.setItem('user', JSON.stringify(newUser.data));
       await onUpdateUser();
       alert('Profile updated');
-    } catch (error) {
-      alert('An error occurred: '+error);
-    }
+        } catch (error) { alert(error.response ? error.response.data.message : error) }
+
   };
   const deleteMe = async (e) => {
     e.preventDefault();
-
-    await onDeleteProfile();
+    try {
+      await onDeleteProfile();
+    } catch (error) {  alert(error.response ? error.response.data.message : error)}
   };
   const toggleVisibility = () => {
     toggle ? setToggle(false) : setToggle(true);
@@ -38,7 +38,7 @@ const UserForm = ({ user, onDeleteProfile, onUpdateUser }) => {
       <h1>Profile {user.email}</h1>
       <label>
         First Name:
-        <input
+        <input required
           type="text"
           value={firstname}
           onChange={(e) => setFirstName(e.target.value)}
@@ -48,7 +48,7 @@ const UserForm = ({ user, onDeleteProfile, onUpdateUser }) => {
 
       <label>
         Last Name
-        <input
+        <input required
           type="text"
           value={lastname}
           onChange={(e) => setLastName(e.target.value)}
@@ -65,11 +65,10 @@ const UserForm = ({ user, onDeleteProfile, onUpdateUser }) => {
       <br />
       {
         toggle ? (
-
           <label>
             Password
             <input
-              type="text"
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -79,7 +78,6 @@ const UserForm = ({ user, onDeleteProfile, onUpdateUser }) => {
       }
 
       <br />
-
       <button type="submit">Update Profile</button>
       <button className="danger" onClick={deleteMe}>Delete Profile</button>
     </form>

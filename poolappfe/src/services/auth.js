@@ -4,6 +4,7 @@ const baseUrl = 'http://localhost:8080/auth';
 
 export const login = async (email, password) => {
     const res = await axios.post(`${baseUrl}/authenticate`, { email, password });
+    console.log(res.data.token)
     return res;
   }
 

@@ -27,7 +27,7 @@ function RegisterPage(props) {
       <label>
         Email
         <br />
-        <input type="text" name="email" />
+        <input type="email" name="email" />
       </label><br />
       <label>
         Password
