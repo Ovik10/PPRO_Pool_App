@@ -1,9 +1,7 @@
 package cz.ppro.poolapp.service;
 
-import cz.ppro.poolapp.config.ErrorHandler;
 import cz.ppro.poolapp.model.Lection;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;

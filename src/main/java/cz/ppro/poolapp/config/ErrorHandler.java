@@ -12,12 +12,11 @@ public class ErrorHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ExceptionRestResponse handleCustomException(Exception exception) {
-        return new ExceptionRestResponse(404, exception.getMessage());
+        return new ExceptionRestResponse(exception.getMessage());
     }
 
     @Value
     public static class ExceptionRestResponse {
-        int code;
         String message;
     }
 }

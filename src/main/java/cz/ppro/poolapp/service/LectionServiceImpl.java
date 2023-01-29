@@ -8,17 +8,12 @@ import cz.ppro.poolapp.repository.LectionRepository;
 import cz.ppro.poolapp.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Calendar;
@@ -45,12 +40,13 @@ public class LectionServiceImpl implements LectionService {
         LocalDateTime localDate = LocalDateTime.now();
         final LocalDateTime beginDate = convertToLocalDateTimeViaInstant(lection.getBeginDate());
         if (localDate.isAfter(beginDate)) {
-            return "Course must be in the future";
-        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Course must be in a future"
+            );
+        }
             lectionRepository.save(lection);
             return "Course has been added";
 
-        }
     }
 
     @Override
@@ -68,8 +64,10 @@ public class LectionServiceImpl implements LectionService {
         LocalDateTime localDate = LocalDateTime.now();
         final LocalDateTime beginDate = convertToLocalDateTimeViaInstant(lection.getBeginDate());
         if (localDate.isAfter(beginDate)) {
-            return "The course must be in the future";
-        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Course must be in a future"
+            );
+        }
             Lection l = lectionRepository.findById(id).get();
             l.setName(lection.getName());
             l.setCapacity(lection.getCapacity());
@@ -78,7 +76,7 @@ public class LectionServiceImpl implements LectionService {
             l.setDescription(lection.getDescription());
             lectionRepository.save(l);
             return "Course has been updated";
-        }
+
     }
 
     public LocalDateTime convertToLocalDateTimeViaInstant(Date dateToConvert) {
