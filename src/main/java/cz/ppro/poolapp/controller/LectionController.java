@@ -5,6 +5,7 @@ import cz.ppro.poolapp.model.Lection;
 import cz.ppro.poolapp.service.LectionService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -39,6 +40,7 @@ public class LectionController {
     public String update(@RequestBody Lection lection, @PathVariable int id) {
         return lectionService.updateLection(lection, id);
     }
+    @Scheduled(cron = "0 0 18 * * *")
     @PutMapping("/daily")
     public void dailyUpdate() {
         lectionService.dailyUpdate();

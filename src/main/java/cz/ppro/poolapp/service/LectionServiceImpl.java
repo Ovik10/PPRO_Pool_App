@@ -181,7 +181,7 @@ public class LectionServiceImpl implements LectionService {
         return "Unbooked";
 
     }
-    @Scheduled(cron = "0 0 18 * * *")
+
     @Override
     public void dailyUpdate() {
         Calendar cal = Calendar.getInstance();
