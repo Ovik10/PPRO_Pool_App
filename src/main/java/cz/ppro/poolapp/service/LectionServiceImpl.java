@@ -37,17 +37,9 @@ public class LectionServiceImpl implements LectionService {
 
     @Override
     public String saveLection(Lection lection) {
-        if(lection.getName().isEmpty() || lection.getDescription().isEmpty() || lection.getBeginDate().equals("") || lection.getCapacity() == 0 ||lection.getPrice() == 0)
-        {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "You must fill all the fields"
-            );
-        }
-        LocalDateTime beginDate = LocalDateTime.now();
+        LocalDateTime beginDate = convertToLocalDateTimeViaInstant(lection.getBeginDate());
         LocalDateTime localDate = LocalDateTime.now();
-        if(!lection.getBeginDate().equals(""))
-        {
-            beginDate = convertToLocalDateTimeViaInstant(lection.getBeginDate());}
+
         if (localDate.isAfter(beginDate)) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Course must be in a future"
@@ -78,17 +70,8 @@ public class LectionServiceImpl implements LectionService {
 
     @Override
     public String updateLection(Lection lection, int id) {
-        if(lection.getName().isEmpty() || lection.getDescription().isEmpty() || lection.getBeginDate().equals("") || lection.getCapacity() == 0 ||lection.getPrice() == 0)
-        {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "You must fill all the fields"
-            );
-        }
-        LocalDateTime beginDate = LocalDateTime.now();
         LocalDateTime localDate = LocalDateTime.now();
-        if(!lection.getBeginDate().equals(""))
-        {
-            beginDate = convertToLocalDateTimeViaInstant(lection.getBeginDate());}
+        LocalDateTime beginDate = convertToLocalDateTimeViaInstant(lection.getBeginDate());
         if (localDate.isAfter(beginDate)) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Course must be in a future"
