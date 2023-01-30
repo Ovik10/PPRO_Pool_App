@@ -7,27 +7,20 @@ import {
   Routes,
   Route,
   Navigate,
-  useNavigate,
 } from 'react-router-dom';
 
 import {
   login,
   register,
   getCurrentUser,
-  putUser,
   addCredits,
   deleteUser,
   getUser,
 } from './services/auth';
 
 import {
-  getCourses,
-  getCourseById,
   createCourse,
   updateCourse,
-  deleteCourse,
-  bookCourse,
-  cancelBooking,
 } from './services/courses';
 
 import Navbar from './components/Navbar';
@@ -127,7 +120,7 @@ const App = () => {
     try {
       const res = await deleteUser();
       setUser(null);
-      
+      localStorage.removeItem('user');
     } catch (error) {  alert(error.response ? error.response.data.message : error)}
 
   };

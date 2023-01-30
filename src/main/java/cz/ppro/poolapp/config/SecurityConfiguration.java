@@ -25,7 +25,7 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**")
+                .requestMatchers("/auth/**", "/course/daily")
                 .permitAll()
                 .requestMatchers("/course/update", "/course/add", "/delete/{id}")
                 .hasAuthority("ADMIN")
